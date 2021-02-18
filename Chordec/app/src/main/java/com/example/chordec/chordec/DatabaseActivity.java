@@ -36,8 +36,8 @@ public class DatabaseActivity extends ActionBarActivity {
     private TextView itemsText;
 
     /*
-    * Overriden methods
-    * */
+     * Overriden methods
+     * */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class DatabaseActivity extends ActionBarActivity {
 
         int id = item.getItemId();
 
-        if( id == android.R.id.home ) {
+        if (id == android.R.id.home) {
 
             finish();
             return true;
@@ -78,8 +78,8 @@ public class DatabaseActivity extends ActionBarActivity {
 
 
     /*
-    * Initialize methods
-    * */
+     * Initialize methods
+     * */
 
     private void initializeDatabase() {
         database = new Database(this);
@@ -131,11 +131,11 @@ public class DatabaseActivity extends ActionBarActivity {
                         //create confirmation dialog
                         AlertDialog.Builder builder = new AlertDialog.Builder(DatabaseActivity.this);
                         builder.setTitle("Delete Confirmation")
-                               .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setCancelable(false)
                                 .setMessage("Are you sure you wanted to delete " +
-                                    selected.size() + " " + itemText + "?")
-                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener(){
+                                        selected.size() + " " + itemText + "?")
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +160,7 @@ public class DatabaseActivity extends ActionBarActivity {
                                     }
                                 });
 
-                            builder.create().show();
+                        builder.create().show();
 
 
                         mode.finish();
@@ -215,7 +215,4 @@ public class DatabaseActivity extends ActionBarActivity {
     }
 
 
-
-
-
- }
+}

@@ -35,13 +35,11 @@ import com.easyandroidanimations.library.BounceAnimation;
 import com.easyandroidanimations.library.FadeInAnimation;
 import com.easyandroidanimations.library.FadeOutAnimation;
 import com.easyandroidanimations.library.RotationAnimation;
-
 import com.example.chordec.chordec.Database.Chord;
 import com.example.chordec.chordec.Database.Database;
 import com.example.chordec.chordec.Helper.Constants;
-import com.example.chordec.chordec.TarsosDSP.SpectralInfo;
-
 import com.example.chordec.chordec.TarsosDSP.AudioDispatcherFactory;
+import com.example.chordec.chordec.TarsosDSP.SpectralInfo;
 import com.example.chordec.chordec.TarsosDSP.SpectralPeakProcessor;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -61,7 +59,7 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 
 public class MainActivity extends ActionBarActivity
-    implements View.OnClickListener{
+        implements View.OnClickListener {
 
     // TAG
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -75,27 +73,27 @@ public class MainActivity extends ActionBarActivity
     private static final int PULSE_DURATION = 800;
 
     // audio sampling constants
-    private static final int  SAMPLING_FREQ = 44100;     // sampling frequency
+    private static final int SAMPLING_FREQ = 44100;     // sampling frequency
     private static final int FFT_LEN = 4096;
     private static final int STEP_SIZE = 512;
 
     private double[] N_FREQ =
-            { 61.735,65.406, 69.296, 73.416,77.782,82.407,87.307,92.499,97.999,103.826,110,116.541,123.471, 130.813 }; // actual frequency of bass note in kHz
+            {61.735, 65.406, 69.296, 73.416, 77.782, 82.407, 87.307, 92.499, 97.999, 103.826, 110, 116.541, 123.471, 130.813}; // actual frequency of bass note in kHz
 
     // widgets in activity_main.xml
     private ImageButton recordButton;
     private ImageButton pauseButton;
     private ImageButton stopButton;
-    private ImageView   recordingImage;
-    private TextView    timerTextView;
+    private ImageView recordingImage;
+    private TextView timerTextView;
 
-    private TextView    hintText;
-    private ImageView   hintImage;
-    private TextView    hintText2;
+    private TextView hintText;
+    private ImageView hintImage;
+    private TextView hintText2;
 
-    private TextView    hintChordText;
-    private TextView    chordText;
-    private TextView    pitchText;
+    private TextView hintChordText;
+    private TextView chordText;
+    private TextView pitchText;
 
     // layouts in activity_main.xml
     private RelativeLayout recordLayout;
@@ -120,7 +118,7 @@ public class MainActivity extends ActionBarActivity
     private boolean isTimerRunning;
     private Timer timer;
     private TimerTask timerTask;
-    private int   duration;
+    private int duration;
 
     //dimensions and positioning
     private int screenHeight;
@@ -140,6 +138,7 @@ public class MainActivity extends ActionBarActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         customizeActionBar();
 
@@ -186,7 +185,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void goToDatabaseActivity() {
-        if(!isRecordLayoutVisible) {
+        if (!isRecordLayoutVisible) {
             Intent intent = new Intent(this, DatabaseActivity.class);
             startActivity(intent);
         }
@@ -216,7 +215,7 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void run() {
 
-                if(isTimerRunning) {
+                if (isTimerRunning) {
                     duration += Constants.MILLISECONDS_RATE;
                     timerTextView.post(new Runnable() {
                         public void run() {
@@ -304,7 +303,7 @@ public class MainActivity extends ActionBarActivity
 //        Log.d(TAG, filePath);
     }
 
-    private void initializeSpectralPeakDetector(){
+    private void initializeSpectralPeakDetector() {
         int overlap = FFT_LEN - STEP_SIZE;
         overlap = overlap < 1 ? 128 : overlap;
 
@@ -318,23 +317,23 @@ public class MainActivity extends ActionBarActivity
         // add pitch detection
         PitchDetectionHandler pdh = new PitchDetectionHandler() {
             @Override
-            public void handlePitch(PitchDetectionResult result,AudioEvent e) {
+            public void handlePitch(PitchDetectionResult result, AudioEvent e) {
                 final int pitchInHz = (int) result.getPitch();
 
-                if(pitchInHz == 24 || pitchInHz == 49 || pitchInHz == 98) {
+                if (pitchInHz == 24 || pitchInHz == 49 || pitchInHz == 98) {
                     currChord = 'G';
                 } else if (pitchInHz == 16 || pitchInHz == 32 || pitchInHz == 65) {
                     currChord = 'C';
-                }else if (pitchInHz == 18 || pitchInHz == 36 || pitchInHz == 73) {
+                } else if (pitchInHz == 18 || pitchInHz == 36 || pitchInHz == 73) {
                     currChord = 'D';
-                }else if (pitchInHz == 20 || pitchInHz == 41 || pitchInHz == 82) {
+                } else if (pitchInHz == 20 || pitchInHz == 41 || pitchInHz == 82) {
                     currChord = 'E';
-                }else if (pitchInHz == 22 || pitchInHz == 43 ) {
+                } else if (pitchInHz == 22 || pitchInHz == 43) {
                     currChord = 'F';
-                }else if (pitchInHz == 13 || pitchInHz == 27 || pitchInHz == 54 || pitchInHz == 55) {
+                } else if (pitchInHz == 13 || pitchInHz == 27 || pitchInHz == 54 || pitchInHz == 55) {
                     currChord = 'A';
                 }
-                if (currChord != prevChord){
+                if (currChord != prevChord) {
                     prevChord = currChord;
                     chordProgression += prevChord + ", ";
                 }
@@ -343,10 +342,9 @@ public class MainActivity extends ActionBarActivity
                     @Override
                     public void run() {
                         chordText.setText(String.valueOf(displayChord));
-                        if(pitchInHz > 0) {
+                        if (pitchInHz > 0) {
                             pitchText.setText(pitchInHz + " Hz");
-                        }
-                        else
+                        } else
                             pitchText.setText("");
                     }
                 });
@@ -361,9 +359,9 @@ public class MainActivity extends ActionBarActivity
     */
 
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.recordButton:
-                if(!isRecordLayoutVisible) {
+                if (!isRecordLayoutVisible) {
                     animateRecordButton();
                     initializeBeforeRecording();
                     Log.d(TAG, "after pressing record button");
@@ -374,14 +372,14 @@ public class MainActivity extends ActionBarActivity
                 break;
 
             case R.id.pauseButton:
-                if(isRecordLayoutVisible) {
+                if (isRecordLayoutVisible) {
                     changePauseButtonSrc();
                 }
 
                 break;
 
             case R.id.stopButton:
-                if(isRecordLayoutVisible) {
+                if (isRecordLayoutVisible) {
                     stopRecording();
                 }
                 break;
@@ -394,7 +392,7 @@ public class MainActivity extends ActionBarActivity
 
     /**
      * Initialize before recording
-     * */
+     */
     private void initializeBeforeRecording() {
         initializeFile();
         initializeRecorder();
@@ -407,10 +405,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     /*
-    * for record button
-    * */
+     * for record button
+     * */
 
-     private void animateRecordButton() {
+    private void animateRecordButton() {
         bounceAnimation();
     }
 
@@ -457,8 +455,8 @@ public class MainActivity extends ActionBarActivity
 
                 if (stopY > 0) { //move down
                     int marginBottom =
-                            (int)getResources().getDimension(R.dimen.record_layout_height)/2
-                            - (int)getResources().getDimension(R.dimen.record_button_height)/2;
+                            (int) getResources().getDimension(R.dimen.record_layout_height) / 2
+                                    - (int) getResources().getDimension(R.dimen.record_button_height) / 2;
 
                     lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     lp.setMargins(0, 0, 0, marginBottom);
@@ -488,7 +486,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void changeLayoutsVisibility() {
-        if(isRecordLayoutVisible) {
+        if (isRecordLayoutVisible) {
             setLayoutsVisible();
         } else {
             setLayoutsInvisible();
@@ -496,7 +494,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void changeWidgetsVisibility() {
-        if(isRecordLayoutVisible) {
+        if (isRecordLayoutVisible) {
             setWidgetsVisible();
         } else {
             setWidgetsInvisible();
@@ -537,12 +535,12 @@ public class MainActivity extends ActionBarActivity
 
 
     /*
-    * for Pause button
-    * */
+     * for Pause button
+     * */
 
     private void changePauseButtonSrc() {
         isPause = !isPause;
-        if(isPause) {
+        if (isPause) {
             pauseButton.setBackgroundResource(R.drawable.play);
         } else {
             pauseButton.setBackgroundResource(R.drawable.pause);
@@ -550,10 +548,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     /*
-    * for stop button
-    * */
+     * for stop button
+     * */
 
-    private void stopRecording () {
+    private void stopRecording() {
         saveChord();
     }
 
@@ -620,7 +618,7 @@ public class MainActivity extends ActionBarActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(which == Dialog.BUTTON_POSITIVE) {
+                                if (which == Dialog.BUTTON_POSITIVE) {
                                     String name = editText.getText().toString();
 
                                     if (!name.isEmpty()) {
@@ -641,7 +639,7 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    private void saveToDatabase (String name, String date) {
+    private void saveToDatabase(String name, String date) {
         Chord chord = saveContent(name, date);
         database.insertChord(chord);
     }
@@ -668,7 +666,7 @@ public class MainActivity extends ActionBarActivity
 
     /**
      * reset after recording
-     * */
+     */
     private void resetAfterRecording() {
         isRecordLayoutVisible = false;
         animateRecordButton();
@@ -696,13 +694,13 @@ public class MainActivity extends ActionBarActivity
     }
 
     /*
-    * Recording audio and writing it to file
-    * */
+     * Recording audio and writing it to file
+     * */
 
 
     /*
-    * Timer utility functions
-    * */
+     * Timer utility functions
+     * */
 
     private void startTimer() {
         isTimerRunning = true;
@@ -733,3 +731,4 @@ public class MainActivity extends ActionBarActivity
 
 
 }
+
