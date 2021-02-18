@@ -64,7 +64,7 @@ public class CustomAdapter extends ArrayAdapter<Chord> {
 
         ViewHolder holder;
 
-        if(convertView == null) {
+        if (convertView == null) {
             convertView = inflater.inflate(LIST_ITEM_XML, parent, false);
             holder = new ViewHolder();
 
@@ -77,11 +77,11 @@ public class CustomAdapter extends ArrayAdapter<Chord> {
             convertView.setTag(holder);
 
         } else {
-            holder = (ViewHolder)  convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         String name = chords.get(position).getChordName();
-        if(name.length() >= TITLE_MAXIMUM_LENGTH)
+        if (name.length() >= TITLE_MAXIMUM_LENGTH)
             holder.ChordName.setText(name.substring(0, TITLE_MAXIMUM_LENGTH));
         else
             holder.ChordName.setText(name);
@@ -95,7 +95,7 @@ public class CustomAdapter extends ArrayAdapter<Chord> {
 
         // make round letters
         String color = Constants.COLORS[position % Constants.COLORS.length];
-                //(int) (Math.random() * Constants.COLORS.length)];
+        //(int) (Math.random() * Constants.COLORS.length)];
 
         TextDrawable roundLetter = TextDrawable.builder()
                 .beginConfig()
@@ -109,7 +109,7 @@ public class CustomAdapter extends ArrayAdapter<Chord> {
 
         holder.RoundedLetter.setImageDrawable(roundLetter);
 
-        if(mSelectedItemsIds.get(position)) {
+        if (mSelectedItemsIds.get(position)) {
             convertView.setBackgroundColor(Color.parseColor(Constants.SELECTED_COLOUR));
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);

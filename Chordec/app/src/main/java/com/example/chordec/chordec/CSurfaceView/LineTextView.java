@@ -36,7 +36,7 @@ public class LineTextView extends TextView {
         if (getLineCount() > count)
             count = getLineCount();
 
-        if(count < 7)
+        if (count < 7)
             count = 7;
 
         Rect r = mRect;

@@ -44,8 +44,8 @@ public class Constants {
         int seconds = duration / MILLISECONDS_RATE;
 
         int hour = seconds / HOURS_RATE;
-        int minute = (seconds - hour*HOURS_RATE) / MINUTES_RATE;
-        int second = (seconds - minute*MINUTES_RATE);
+        int minute = (seconds - hour * HOURS_RATE) / MINUTES_RATE;
+        int second = (seconds - minute * MINUTES_RATE);
 
         String text = second < 10 ?
                 minute + ":0" + second : minute + ":" + second;

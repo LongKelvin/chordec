@@ -93,7 +93,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
             return true;
         }
 
-        if(id == android.R.id.home) {
+        if (id == android.R.id.home) {
 
             finish();
 
@@ -119,12 +119,12 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
     protected void onDestroy() {
         super.onDestroy();
 
-        if(mMediaController != null) {
+        if (mMediaController != null) {
             mMediaController.hide();
             mHandler.removeCallbacks(mRunnable);
         }
 
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -132,8 +132,8 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
     }
 
     /*
-    * Initialize methods
-    * */
+     * Initialize methods
+     * */
 
     private void initializeDatabase() {
         database = new Database(this);
@@ -163,7 +163,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
     private void initializeMedia() {
         File file = new File(chord.getChordPath());
         Log.d(TAG, file.getAbsolutePath());
-        if(file.exists())
+        if (file.exists())
             initializeMediaPlayer();
     }
 
@@ -172,13 +172,14 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
         mMediaController = new MediaController(this) {
             //for not hiding
             @Override
-            public void hide() {}
+            public void hide() {
+            }
 
             //for 'back' key action
             @Override
             public boolean dispatchKeyEvent(KeyEvent event) {
-                if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-                    Activity a = (Activity)getContext();
+                if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                    Activity a = (Activity) getContext();
                     a.finish();
                 }
                 return true;
@@ -271,13 +272,13 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                if(which == Dialog.BUTTON_POSITIVE) {
+                                if (which == Dialog.BUTTON_POSITIVE) {
                                     String name = editText.getText().toString();
 
                                     if (!name.isEmpty()) {
 
                                         int result = editDatabase(name);
-                                        if(result != 0) {
+                                        if (result != 0) {
                                             initializeChordNameTextView();
                                             Toast.makeText(PlayActivity.this,
                                                     "Chord name changed", Toast.LENGTH_SHORT).show();
@@ -303,8 +304,8 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
     }
 
     /*
-    * Media player + media controller
-    * */
+     * Media player + media controller
+     * */
 
     @Override
     public boolean canPause() {
@@ -328,7 +329,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
 
     @Override
     public int getBufferPercentage() {
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             return (mMediaPlayer.getCurrentPosition() * 100) / mMediaPlayer.getDuration();
         }
 
@@ -337,7 +338,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
 
     @Override
     public int getCurrentPosition() {
-        if(mMediaPlayer != null)
+        if (mMediaPlayer != null)
             return mMediaPlayer.getCurrentPosition();
 
         return 0;
@@ -345,7 +346,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
 
     @Override
     public int getDuration() {
-        if(mMediaPlayer != null)
+        if (mMediaPlayer != null)
             return mMediaPlayer.getDuration();
 
         return 0;
@@ -358,7 +359,7 @@ public class PlayActivity extends ActionBarActivity implements MediaController.M
 
     @Override
     public void pause() {
-        if(mMediaPlayer.isPlaying())
+        if (mMediaPlayer.isPlaying())
             mMediaPlayer.pause();
     }
 

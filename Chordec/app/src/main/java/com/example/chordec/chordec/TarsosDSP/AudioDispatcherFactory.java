@@ -1,27 +1,27 @@
 package com.example.chordec.chordec.TarsosDSP;
 
 /*
-*      _______                       _____   _____ _____
-*     |__   __|                     |  __ \ / ____|  __ \
-*        | | __ _ _ __ ___  ___  ___| |  | | (___ | |__) |
-*        | |/ _` | '__/ __|/ _ \/ __| |  | |\___ \|  ___/
-*        | | (_| | |  \__ \ (_) \__ \ |__| |____) | |
-*        |_|\__,_|_|  |___/\___/|___/_____/|_____/|_|
-*
-* -------------------------------------------------------------
-*
-* TarsosDSP is developed by Joren Six at IPEM, University Ghent
-*
-* -------------------------------------------------------------
-*
-*  Info: http://0110.be/tag/TarsosDSP
-*  Github: https://github.com/JorenSix/TarsosDSP
-*  Releases: http://0110.be/releases/TarsosDSP/
-*
-*  TarsosDSP includes modified source code by various authors,
-*  for credits and info, see README.
-*
-*/
+ *      _______                       _____   _____ _____
+ *     |__   __|                     |  __ \ / ____|  __ \
+ *        | | __ _ _ __ ___  ___  ___| |  | | (___ | |__) |
+ *        | |/ _` | '__/ __|/ _ \/ __| |  | |\___ \|  ___/
+ *        | | (_| | |  \__ \ (_) \__ \ |__| |____) | |
+ *        |_|\__,_|_|  |___/\___/|___/_____/|_____/|_|
+ *
+ * -------------------------------------------------------------
+ *
+ * TarsosDSP is developed by Joren Six at IPEM, University Ghent
+ *
+ * -------------------------------------------------------------
+ *
+ *  Info: http://0110.be/tag/TarsosDSP
+ *  Github: https://github.com/JorenSix/TarsosDSP
+ *  Releases: http://0110.be/releases/TarsosDSP/
+ *
+ *  TarsosDSP includes modified source code by various authors,
+ *  for credits and info, see README.
+ *
+ */
 
 
 import android.media.AudioRecord;
@@ -50,7 +50,7 @@ import be.tarsos.dsp.io.android.AndroidAudioInputStream;
  * @see be.tarsos.dsp.AudioDispatcher
  */
 public class AudioDispatcherFactory {
-    private static  AudioRecord audioInputStream = null;
+    private static AudioRecord audioInputStream = null;
     private static Thread recordingThread = null;
     private static boolean isRecording = false;
     private static int minAudioBufferSize = 0;
@@ -60,34 +60,32 @@ public class AudioDispatcherFactory {
 
     private static String fileChordPath = "";
     private static boolean isSetFilePath = false;
+
     /**
      * Create a new AudioDispatcher connected to the default microphone.
      *
-     * @param sampleRate
-     *            The requested sample rate.
-     * @param audioBufferSize
-     *            The size of the audio buffer (in samples).
-     *
-     * @param bufferOverlap
-     *            The size of the overlap (in samples).
+     * @param sampleRate      The requested sample rate.
+     * @param audioBufferSize The size of the audio buffer (in samples).
+     * @param bufferOverlap   The size of the overlap (in samples).
      * @return A new AudioDispatcher
      */
     public static AudioDispatcher fromDefaultMicrophone(final int sampleRate, final int audioBufferSize, final int bufferOverlap) {
         minAudioBufferSize = AudioRecord.getMinBufferSize(sampleRate, android.media.AudioFormat.CHANNEL_IN_MONO, android.media.AudioFormat.ENCODING_PCM_16BIT);
-        int minAudioBufferSizeInSamples =  minAudioBufferSize/2;
-        if(minAudioBufferSizeInSamples <= audioBufferSize ){
+        int minAudioBufferSizeInSamples = minAudioBufferSize / 2;
+        if (minAudioBufferSizeInSamples <= audioBufferSize) {
             audioInputStream = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, android.media.AudioFormat.CHANNEL_IN_MONO, android.media.AudioFormat.ENCODING_PCM_16BIT, audioBufferSize * 2);
-            TarsosDSPAudioFormat format = new TarsosDSPAudioFormat(sampleRate, 16,1, true, false);
+            TarsosDSPAudioFormat format = new TarsosDSPAudioFormat(sampleRate, 16, 1, true, false);
             TarsosDSPAudioInputStream audioStream = new AndroidAudioInputStream(audioInputStream, format);
             //start recording ! Opens the stream.
             //audioInputStream.startRecording();
 
-            return new AudioDispatcher(audioStream,audioBufferSize,bufferOverlap);
-        }else{
-            new IllegalArgumentException("Buffer size too small should be at least " + (minAudioBufferSize *2));
+            return new AudioDispatcher(audioStream, audioBufferSize, bufferOverlap);
+        } else {
+            new IllegalArgumentException("Buffer size too small should be at least " + (minAudioBufferSize * 2));
             return null;
         }
     }
+
     public static void startRecording() {
         audioInputStream.startRecording();
         isRecording = true;
@@ -175,7 +173,7 @@ public class AudioDispatcherFactory {
             tempFile.delete();
         System.out.println("---4-5--");
 
-        fileChordPath = (file.getAbsolutePath() + "/" + (int)(Math.random()*Integer.MAX_VALUE) + "-" +
+        fileChordPath = (file.getAbsolutePath() + "/" + (int) (Math.random() * Integer.MAX_VALUE) + "-" +
                 AUDIO_RECORDER_TEMP_FILE);
     }
 

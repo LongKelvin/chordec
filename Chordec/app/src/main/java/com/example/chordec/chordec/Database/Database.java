@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by thearith on 4/4/15.
  */
-public class Database extends SQLiteOpenHelper{
+public class Database extends SQLiteOpenHelper {
 
     private static final String TAG = Database.class.getSimpleName();
 
@@ -27,21 +27,21 @@ public class Database extends SQLiteOpenHelper{
     private static final String CHORD_DATE = "chord_date";
     private static final String CHORD_FILE_PATH = "chord_file_path";
 
-    private static final int    CHORD_ID_INDEX = 0;
-    private static final int    CHORD_NAME_INDEX = 1;
-    private static final int    CHORD_SCORE_INDEX = 2;
-    private static final int    CHORD_DURATION_INDEX = 3;
-    private static final int    CHORD_DATE_INDEX = 4;
-    private static final int    CHORD_FILE_PATH_INDEX = 5;
+    private static final int CHORD_ID_INDEX = 0;
+    private static final int CHORD_NAME_INDEX = 1;
+    private static final int CHORD_SCORE_INDEX = 2;
+    private static final int CHORD_DURATION_INDEX = 3;
+    private static final int CHORD_DATE_INDEX = 4;
+    private static final int CHORD_FILE_PATH_INDEX = 5;
 
 
     private static final String TABLE_CHORD_CREATE = "create table "
-            + TABLE_CHORDS  + "(" +
-            CHORD_ID            + " integer primary key autoincrement, " +
-            CHORD_NAME          + " text not null, "    +
-            CHORD_SCORE         + " text not null, "    +
-            CHORD_DURATION      + " integer not null, " +
-            CHORD_DATE    + " text not null, " +
+            + TABLE_CHORDS + "(" +
+            CHORD_ID + " integer primary key autoincrement, " +
+            CHORD_NAME + " text not null, " +
+            CHORD_SCORE + " text not null, " +
+            CHORD_DURATION + " integer not null, " +
+            CHORD_DATE + " text not null, " +
             CHORD_FILE_PATH + " text not null);";
 
 
@@ -89,7 +89,7 @@ public class Database extends SQLiteOpenHelper{
     public String getStringNextChordId() {
 
         int numChords = getNumChords();
-        int random  = (int) (Math.random()*NUM_RANDOM);
+        int random = (int) (Math.random() * NUM_RANDOM);
 
         return String.valueOf(numChords) + String.valueOf(random);
     }
@@ -111,12 +111,12 @@ public class Database extends SQLiteOpenHelper{
         Cursor cursor = database.rawQuery(TABLE_CHORD_LOAD, null);
         int sum = 0;
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 int chordDuration = Integer.parseInt(cursor.getString(CHORD_DURATION_INDEX));
                 sum += chordDuration;
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         return sum;
@@ -129,10 +129,10 @@ public class Database extends SQLiteOpenHelper{
         Chord chord = new Chord();
         chord.setChordID(chordID);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 int chordId = Integer.parseInt(cursor.getString(CHORD_ID_INDEX));
-                if(chordId == chordID) {
+                if (chordId == chordID) {
 
                     String chordName = cursor.getString(CHORD_NAME_INDEX);
                     String chordScore = cursor.getString(CHORD_SCORE_INDEX);
@@ -149,7 +149,7 @@ public class Database extends SQLiteOpenHelper{
                     break;
                 }
 
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         database.close();
@@ -194,7 +194,7 @@ public class Database extends SQLiteOpenHelper{
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(TABLE_CHORD_LOAD, null);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 Chord chord = new Chord();
 
@@ -214,7 +214,7 @@ public class Database extends SQLiteOpenHelper{
 
                 chords.add(chord);
 
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         database.close();

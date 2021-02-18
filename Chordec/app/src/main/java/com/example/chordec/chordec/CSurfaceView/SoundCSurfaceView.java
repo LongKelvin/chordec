@@ -17,10 +17,10 @@ import android.view.SurfaceView;
 
 public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Context         drawContext;
-    public  DrawThread       drawThread;
-    private SurfaceHolder    drawSurfaceHolder;
-    private Boolean          threadExists = false;
+    private Context drawContext;
+    public DrawThread drawThread;
+    private SurfaceHolder drawSurfaceHolder;
+    private Boolean threadExists = false;
 
     public static volatile Boolean drawFlag = false;
 
@@ -33,15 +33,13 @@ public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     }
 
-    private static final Handler handler = new Handler(){
+    private static final Handler handler = new Handler() {
 
-        public void handleMessage(Message paramMessage)
-        {
+        public void handleMessage(Message paramMessage) {
         }
     };
 
-    public void init()
-    {
+    public void init() {
 
         if (!threadExists) {
 
@@ -50,97 +48,86 @@ public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
             drawThread = new DrawThread(drawSurfaceHolder, drawContext, handler);
 
-            drawThread.setName("" +System.currentTimeMillis());
+            drawThread.setName("" + System.currentTimeMillis());
             drawThread.start();
         }
 
         threadExists = Boolean.valueOf(true);
 
-        drawFlag     = Boolean.valueOf(true);
+        drawFlag = Boolean.valueOf(true);
 
         return;
 
     }
 
 
-    public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3)
-    {
+    public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1, int paramInt2, int paramInt3) {
         drawThread.setSurfaceSize(paramInt2, paramInt3);
     }
 
-    public void surfaceCreated(SurfaceHolder paramSurfaceHolder)
-    {
+    public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
 
         init();
 
     }
 
-    public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder)
-    {
-        while (true)
-        {
+    public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
+        while (true) {
             if (!drawFlag)
                 return;
-            try
-            {
+            try {
                 drawFlag = Boolean.valueOf(false);
                 drawThread.join();
 
-            }
-            catch (InterruptedException localInterruptedException)
-            {
+            } catch (InterruptedException localInterruptedException) {
             }
         }
 
     }
 
 
-    public class DrawThread extends Thread
-    {
+    public class DrawThread extends Thread {
         private Bitmap soundBackgroundImage;
-        private short[]        soundBuffer;
-        private int[]          soundSegmented;
+        private short[] soundBuffer;
+        private int[] soundSegmented;
 
-        public  Boolean        soundCapture = Boolean.valueOf(false);
+        public Boolean soundCapture = Boolean.valueOf(false);
 
-        public  int            FFT_Len      = 1024;
-        public  int            segmentIndex = -1;
+        public int FFT_Len = 1024;
+        public int segmentIndex = -1;
 
-        private int            soundCanvasHeight = 0;
-        private int			   soundCanvasWidth  = 0;
+        private int soundCanvasHeight = 0;
+        private int soundCanvasWidth = 0;
 
-        private Paint		   soundLinePaint;
-        private SurfaceHolder  soundSurfaceHolder;
-        private int            drawScale   = 8;
+        private Paint soundLinePaint;
+        private SurfaceHolder soundSurfaceHolder;
+        private int drawScale = 8;
 
-        public DrawThread(SurfaceHolder paramContext, Context paramHandler, Handler arg4)
-        {
+        public DrawThread(SurfaceHolder paramContext, Context paramHandler, Handler arg4) {
             soundSurfaceHolder = paramContext;
 
-            soundLinePaint     = new Paint();
+            soundLinePaint = new Paint();
             soundLinePaint.setAntiAlias(true);
             soundLinePaint.setARGB(255, 255, 0, 0);
             soundLinePaint.setStrokeWidth(10);
 
-            soundBuffer        = new short[2048];
+            soundBuffer = new short[2048];
 
             soundBackgroundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 
 
-            soundSegmented     = new int[FFT_Len];
+            soundSegmented = new int[FFT_Len];
 
         }
 
 
+        public void doDraw(Canvas canvas) {
 
-        public void doDraw(Canvas canvas)
-        {
+            soundCanvasHeight = canvas.getHeight();
+            soundCanvasWidth = canvas.getWidth();
 
-            soundCanvasHeight  = canvas.getHeight();
-            soundCanvasWidth   = canvas.getWidth();
-
-            int height         = soundCanvasHeight;
-            int width          = soundCanvasWidth;
+            int height = soundCanvasHeight;
+            int width = soundCanvasWidth;
 
             Paint paint = new Paint();
             paint.setColor(Color.YELLOW);
@@ -151,16 +138,16 @@ public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                 int xStart = 0;
 
-                while (xStart < width -1)  {
+                while (xStart < width - 1) {
 
                     int yStart = soundBuffer[xStart] / height * drawScale;
-                    int yStop  = soundBuffer[xStart+1] / height * drawScale;
+                    int yStop = soundBuffer[xStart + 1] / height * drawScale;
 
-                    int xStart1 = xStart + width/5 ;
-                    int xStop1 = xStart + 1 + width/5;
+                    int xStart1 = xStart + width / 5;
+                    int xStop1 = xStart + 1 + width / 5;
 
-                    int yStart1 = yStart + height/2;
-                    int yStop1  = yStop  + height/2;
+                    int yStart1 = yStart + height / 2;
+                    int yStop1 = yStop + height / 2;
 
                     canvas.drawLine(xStart1, yStart1, xStop1, yStop1, soundLinePaint);
 
@@ -182,15 +169,15 @@ public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 // display the signal in temporal domain
                 int xStart = 0;
 
-                while (xStart < width -1)  {
+                while (xStart < width - 1) {
 
                     int yStart = soundSegmented[xStart] / height * drawScale;
-                    int yStop  = soundSegmented[xStart+1] / height * drawScale;
+                    int yStop = soundSegmented[xStart + 1] / height * drawScale;
 
-                    int yStart1 = yStart + height/4;
-                    int yStop1  = yStop  + height/4;
+                    int yStart1 = yStart + height / 4;
+                    int yStop1 = yStop + height / 4;
 
-                    canvas.drawLine(xStart, yStart1, xStart +1, yStop1, soundLinePaint);
+                    canvas.drawLine(xStart, yStart1, xStart + 1, yStop1, soundLinePaint);
 
                     xStart++;
 
@@ -201,45 +188,35 @@ public class SoundCSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
 
 
-        public void setBuffer(short[] paramArrayOfShort)
-        {
-            synchronized (soundBuffer)
-            {
+        public void setBuffer(short[] paramArrayOfShort) {
+            synchronized (soundBuffer) {
                 soundBuffer = paramArrayOfShort;
                 return;
             }
         }
 
 
-        public void setSurfaceSize(int canvasWidth, int canvasHeight)
-        {
-            synchronized (soundSurfaceHolder)
-            {
+        public void setSurfaceSize(int canvasWidth, int canvasHeight) {
+            synchronized (soundSurfaceHolder) {
                 soundBackgroundImage = Bitmap.createScaledBitmap(soundBackgroundImage, canvasWidth, canvasHeight, true);
                 return;
             }
         }
 
 
-        public void run()
-        {
+        public void run() {
 
-            while (drawFlag)
-            {
+            while (drawFlag) {
 
                 Canvas localCanvas = null;
-                try
-                {
+                try {
                     localCanvas = soundSurfaceHolder.lockCanvas(null);
-                    synchronized (soundSurfaceHolder)
-                    {
+                    synchronized (soundSurfaceHolder) {
                         if (localCanvas != null)
                             doDraw(localCanvas);
 
                     }
-                }
-                finally
-                {
+                } finally {
                     if (localCanvas != null)
                         soundSurfaceHolder.unlockCanvasAndPost(localCanvas);
                 }
